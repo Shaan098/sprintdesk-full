@@ -12,6 +12,20 @@ const COLUMNS = [
 const initials = (name = '') => name.split(' ').map((w) => w[0]).slice(0, 2).join('').toUpperCase();
 const fmt = (d) => new Date(d).toLocaleDateString(undefined, { day: 'numeric', month: 'short' });
 
+function tiltTicket(e) {
+  if (e.pointerType !== 'mouse') return;
+  const rect = e.currentTarget.getBoundingClientRect();
+  const x = (e.clientX - rect.left) / rect.width - 0.5;
+  const y = (e.clientY - rect.top) / rect.height - 0.5;
+  e.currentTarget.style.setProperty('--tilt-x', `${y * -7}deg`);
+  e.currentTarget.style.setProperty('--tilt-y', `${x * 9}deg`);
+}
+
+function resetTicket(e) {
+  e.currentTarget.style.removeProperty('--tilt-x');
+  e.currentTarget.style.removeProperty('--tilt-y');
+}
+
 export default function Board({ projectId, user }) {
   const [project, setProject] = useState(null);
   const [sprints, setSprints] = useState([]);
@@ -154,6 +168,7 @@ export default function Board({ projectId, user }) {
               {items.map((t) => (
                 <article key={t._id} className={`card ${t.type}`} draggable
                   onDragStart={(e) => e.dataTransfer.setData('text/plain', t._id)}
+                  onPointerMove={tiltTicket} onPointerLeave={resetTicket}
                   onClick={() => setModal({ ticket: t })} tabIndex={0}
                   onKeyDown={(e) => e.key === 'Enter' && setModal({ ticket: t })}>
                   <div className="card-top">

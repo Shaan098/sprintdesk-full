@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { api, getToken } from './api';
 import Auth from './Auth';
 import Board from './Board';
+import ParallaxDecor from './ParallaxDecor';
 
 export default function App() {
   const [user, setUser] = useState(() => {
@@ -43,6 +44,8 @@ export default function App() {
   if (!loggedIn) return <Auth onAuth={setUser} />;
 
   return (
+    <>
+    <ParallaxDecor />
     <div className="shell">
       <aside className="sidebar">
         <div className="brand">SprintDesk</div>
@@ -75,5 +78,6 @@ export default function App() {
         )}
       </main>
     </div>
+    </>
   );
 }
